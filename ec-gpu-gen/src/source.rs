@@ -618,10 +618,11 @@ fn generate_cuda(source_builder: &SourceBuilder) -> PathBuf {
                 // Compile with as many threads as CPUs are available.
                 .arg("--threads=0")
                 .arg("--fatbin")
-                .arg("--gpu-architecture=sm_86")
-                .arg("--generate-code=arch=compute_86,code=sm_86")
+                .arg("--gpu-architecture=sm_70")
+                .arg("--generate-code=arch=compute_70,code=sm_70")
+                .arg("--generate-code=arch=compute_72,code=sm_72")
                 .arg("--generate-code=arch=compute_80,code=sm_80")
-                .arg("--generate-code=arch=compute_75,code=sm_75");
+                .arg("--generate-code=arch=compute_86,code=sm_86");
             command
         }
     };
