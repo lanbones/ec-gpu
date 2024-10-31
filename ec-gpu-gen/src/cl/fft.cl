@@ -325,7 +325,7 @@ KERNEL void FIELD_eval_h_logups_extend(
   //   - ∑_i Π_{j != i} φ_j(X))
   // ) = 0
   value = FIELD_mul(value, y_beta_gamma[0]);
-  tmp = FIELD_sub(grand_sum_coset[r_next],grand_sum_coset[idx]);
+  FIELD tmp = FIELD_sub(grand_sum_coset[r_next],grand_sum_coset[idx]);
   tmp = FIELD_mul(tmp, input_product[idx]);
   tmp = FIELD_sub(tmp,input_product_sum[idx]);
   tmp = FIELD_mul(tmp, l_active_row[idx]);
