@@ -251,14 +251,14 @@ KERNEL void FIELD_eval_h_lookups(
 }
 
 
-KERNEL void FIELD_eval_h_logups(
+KERNEL void FIELD_eval_h_logup(
   GLOBAL FIELD* values,
   GLOBAL FIELD* table,
   GLOBAL FIELD* input_product,
   GLOBAL FIELD* input_product_sum,
   GLOBAL FIELD* m_poly_coset,
-  GLOBAL FIELD* first_grand_sum_coset,
-  GLOBAL FIELD* last_grand_sum_coset,
+  GLOBAL FIELD* first_z_coset,
+  GLOBAL FIELD* last_z_coset,
   GLOBAL FIELD* l0,
   GLOBAL FIELD* l_last,
   GLOBAL FIELD* l_active_row,
@@ -275,12 +275,12 @@ KERNEL void FIELD_eval_h_logups(
 
   // l_0(X) * (z_0(X)) = 0
   value = FIELD_mul(value, y_beta_gamma[0]);
-  FIELD tmp = FIELD_mul(first_grand_sum_coset[idx], l0[idx]);
+  FIELD tmp = FIELD_mul(first_z_coset[idx], l0[idx]);
   value = FIELD_add(value, tmp);
 
   // l_last(X) * (z_l(X)) = 0
   value = FIELD_mul(value, y_beta_gamma[0]);
-  tmp = FIELD_mul(last_grand_sum_coset[idx], l_last[idx]);
+  tmp = FIELD_mul(last_z_coset[idx], l_last[idx]);
   value = FIELD_add(value, tmp);
 
   // (1 - (l_last(X) + l_blind(X))) * (
@@ -293,7 +293,7 @@ KERNEL void FIELD_eval_h_logups(
   // ) = 0
 
   value = FIELD_mul(value, y_beta_gamma[0]);
-  tmp = FIELD_sub(first_grand_sum_coset[r_next],first_grand_sum_coset[idx]);
+  tmp = FIELD_sub(first_z_coset[r_next],first_z_coset[idx]);
   tmp = FIELD_mul(tmp, table[idx]);
   tmp = FIELD_add(tmp, m_poly_coset[idx]);
   tmp = FIELD_mul(tmp, input_product[idx]);
@@ -303,11 +303,11 @@ KERNEL void FIELD_eval_h_logups(
   values[idx] = FIELD_add(value, tmp);
 }
 
-KERNEL void FIELD_eval_h_logups_extend(
+KERNEL void FIELD_eval_h_logup_extra(
   GLOBAL FIELD* values,
   GLOBAL FIELD* input_product,
   GLOBAL FIELD* input_product_sum,
-  GLOBAL FIELD* grand_sum_coset,
+  GLOBAL FIELD* z_coset,
   GLOBAL FIELD* l_active_row,
   GLOBAL FIELD* y_beta_gamma,
   uint rot,
@@ -325,7 +325,7 @@ KERNEL void FIELD_eval_h_logups_extend(
   //   - ∑_i Π_{j != i} φ_j(X))
   // ) = 0
   value = FIELD_mul(value, y_beta_gamma[0]);
-  FIELD tmp = FIELD_sub(grand_sum_coset[r_next],grand_sum_coset[idx]);
+  FIELD tmp = FIELD_sub(z_coset[r_next],z_coset[idx]);
   tmp = FIELD_mul(tmp, input_product[idx]);
   tmp = FIELD_sub(tmp,input_product_sum[idx]);
   tmp = FIELD_mul(tmp, l_active_row[idx]);
@@ -333,7 +333,7 @@ KERNEL void FIELD_eval_h_logups_extend(
 }
 
 
-KERNEL void FIELD_eval_h_logup_grand_sum(
+KERNEL void FIELD_eval_h_logup_z(
   GLOBAL FIELD* value,
   GLOBAL FIELD* curr_set,
   GLOBAL FIELD* prev_set,
